@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Box, Button } from '@mui/material';
-import listerLogo from './listerLogo.png';
+import listerLogo from '../../assets/listerLogo.png';
 import StartButton from '../StartButton/StartButton';
 
 class Header extends Component {
   render() {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', textAlign: 'center' }}>
-        <Box sx={{ cursor: 'pointer' }}>
+        <Box sx={{ cursor: 'pointer', ':hover': { opacity: '0.85' } }}>
           <img height={85} width={160} src={listerLogo} alt='logo' />
         </Box>
         <Box>

@@ -12,4 +12,11 @@ export const theme = createTheme({
       '"Segoe UI Symbol"',
     ].join(','),
   },
+  palette: {
+    primary: {
+      main: '#FFD600', //this overide blue color
+      light: '#FFD600', //overides light blue
+      dark: '#FFD600', //overides dark blue color
+    },
+  },
 });
