@@ -1,29 +1,36 @@
-import React, { Component, ReactNode } from "react";
-import {
-  Switch,
-  Route,
-  withRouter,
-  RouteComponentProps,
-} from "react-router-dom";
-import Auth from "./pages/Auth";
-import Welcome from "./pages/Welcome";
+import { AuthContext } from "./context/AuthContext";
+import { useAuth } from "./hooks/auth.hook";
+import { Switch, Route } from "react-router";
+import { AuthPage } from "./pages/AuthPage";
+import { WelcomePage } from "./pages/WelcomePage";
 
-class App extends Component<RouteComponentProps> {
-  render(): ReactNode {
-    return (
+const App = () => {
+  const { login, logout, token, userId, isReady } = useAuth();
+  const isLogin = Boolean(token);
+
+  return (
+    <AuthContext.Provider value={{ login, logout, token, userId, isReady }}>
       <Switch>
-        <Route exact path="/">
-          <Welcome />
-        </Route>
-        <Route path="/auth/login">
-          <Auth />
-        </Route>
-        <Route path="/auth/signup">
-          <Auth />
-        </Route>
+        {isLogin ? (
+          <Route exact path="/">
+            <WelcomePage />
+          </Route>
+        ) : (
+          <>
+            <Route exact path="/">
+              <WelcomePage />
+            </Route>
+            <Route path="/auth/login">
+              <AuthPage />
+            </Route>
+            <Route path="/auth/signup">
+              <AuthPage />
+            </Route>
+          </>
+        )}
       </Switch>
-    );
-  }
-}
+    </AuthContext.Provider>
+  );
+};
 
-export default withRouter(App);
+export default App;

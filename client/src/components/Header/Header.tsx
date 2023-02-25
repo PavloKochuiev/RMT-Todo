@@ -1,56 +1,58 @@
-import React, { Component } from "react";
+import React from "react";
 import { Box, Button } from "@mui/material";
 import listerLogo from "../../assets/listerLogo.png";
 import StartButton from "../StartButton/StartButton";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
-interface Props extends RouteComponentProps {}
+export const Header = () => {
+  const history = useHistory();
 
-class Header extends Component<Props> {
-  handleNavigateToLogin = () => {
-    this.props.history.push("/auth/login");
+  const handleNavigateToLogin = () => {
+    history.push("/auth/login");
   };
 
-  handleNavigateToWelcomePage = () => {
-    this.props.history.push("/");
+  const handleNavigateToWelcomePage = () => {
+    history.push("/");
   };
 
-  render() {
-    return (
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        textAlign: "center",
+      }}
+    >
       <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          textAlign: "center",
-        }}
+        onClick={handleNavigateToWelcomePage}
+        sx={{ cursor: "pointer", ":hover": { opacity: "0.85" } }}
       >
-        <Box
-          onClick={this.handleNavigateToWelcomePage}
-          sx={{ cursor: "pointer", ":hover": { opacity: "0.85" } }}
-        >
-          <img height={85} width={160} src={listerLogo} alt="logo" />
-        </Box>
-        <Box>
-          <Button
-            onClick={this.handleNavigateToLogin}
-            sx={{
-              textTransform: "none",
-              color: "#232115",
-              fontSize: "16px",
-              borderRadius: "10px",
-              paddingX: "15px",
-              marginRight: "20px",
-              ":hover": { backgroundColor: "hsla(53,10%,69%,.15)" },
-            }}
-          >
-            Log in
-          </Button>
-          <StartButton width="140px" fontSize="16px" />
-        </Box>
+        <img
+          height={85}
+          width={160}
+          src={listerLogo}
+          alt="logo"
+          onClick={handleNavigateToWelcomePage}
+        />
       </Box>
-    );
-  }
-}
-
-export default withRouter(Header);
+      <Box>
+        <Button
+          onClick={handleNavigateToLogin}
+          sx={{
+            textTransform: "none",
+            color: "#232115",
+            fontSize: "16px",
+            borderRadius: "10px",
+            paddingX: "15px",
+            marginRight: "20px",
+            ":hover": { backgroundColor: "hsla(53,10%,69%,.15)" },
+          }}
+        >
+          Log in
+        </Button>
+        <StartButton width="140px" fontSize="16px" />
+      </Box>
+    </Box>
+  );
+};
