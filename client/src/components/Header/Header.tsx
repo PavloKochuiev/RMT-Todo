@@ -1,34 +1,56 @@
-import React, { Component } from 'react';
-import { Box, Button } from '@mui/material';
-import listerLogo from '../../assets/listerLogo.png';
-import StartButton from '../StartButton/StartButton';
+import React, { Component } from "react";
+import { Box, Button } from "@mui/material";
+import listerLogo from "../../assets/listerLogo.png";
+import StartButton from "../StartButton/StartButton";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 
-class Header extends Component {
+interface Props extends RouteComponentProps {}
+
+class Header extends Component<Props> {
+  handleNavigateToLogin = () => {
+    this.props.history.push("/auth/login");
+  };
+
+  handleNavigateToWelcomePage = () => {
+    this.props.history.push("/");
+  };
+
   render() {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', textAlign: 'center' }}>
-        <Box sx={{ cursor: 'pointer', ':hover': { opacity: '0.85' } }}>
-          <img height={85} width={160} src={listerLogo} alt='logo' />
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          textAlign: "center",
+        }}
+      >
+        <Box
+          onClick={this.handleNavigateToWelcomePage}
+          sx={{ cursor: "pointer", ":hover": { opacity: "0.85" } }}
+        >
+          <img height={85} width={160} src={listerLogo} alt="logo" />
         </Box>
         <Box>
           <Button
+            onClick={this.handleNavigateToLogin}
             sx={{
-              textTransform: 'none',
-              color: '#232115',
-              fontSize: '16px',
-              borderRadius: '10px',
-              paddingX: '15px',
-              marginRight: '20px',
-              ':hover': { backgroundColor: 'hsla(53,10%,69%,.15)' },
+              textTransform: "none",
+              color: "#232115",
+              fontSize: "16px",
+              borderRadius: "10px",
+              paddingX: "15px",
+              marginRight: "20px",
+              ":hover": { backgroundColor: "hsla(53,10%,69%,.15)" },
             }}
           >
             Log in
           </Button>
-          <StartButton width='140px' fontSize='16px' />
+          <StartButton width="140px" fontSize="16px" />
         </Box>
       </Box>
     );
   }
 }
 
-export default Header;
+export default withRouter(Header);
