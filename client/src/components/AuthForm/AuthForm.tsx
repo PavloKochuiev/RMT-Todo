@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from "react";
 import { Formik, Form, Field } from "formik";
 import {
@@ -6,7 +5,7 @@ import {
   IconButton,
   Input,
   InputAdornment,
-  Typography
+  Typography,
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -19,13 +18,15 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 
 type LoginResponse = {
-  jwtToken: string;
+  token: string;
   userId: string;
 };
 
 export const AuthForm = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [errorMessageSignup, setErrorMessageSignup] = React.useState("");
+  const [errorMessageLogin, setErrorMessageLogin] = React.useState("");
+
   const { login } = React.useContext(AuthContext);
   const navigate = useNavigate();
   const location = window.location.pathname;
@@ -50,8 +51,8 @@ export const AuthForm = () => {
         { email: email, password: password },
         { headers: { "Content-Type": "application/json" } }
       )
-      .then(response => console.log(response.data))
-      .catch(error => setErrorMessageSignup(error.response.data.message));
+      .then((response) => login(response.data.token, response.data.userId))
+      .catch((error) => setErrorMessageSignup(error.response.data.message));
   };
 
   const handleLoginSubmit = async (email: string, password: string) => {
@@ -61,8 +62,8 @@ export const AuthForm = () => {
         { email: email, password: password },
         { headers: { "Content-Type": "application/json" } }
       )
-      .then(response => login(response.data.jwtToken, response.data.userId))
-      .catch(error => setErrorMessageSignup(error.response.data.message));
+      .then((response) => login(response.data.token, response.data.userId))
+      .catch((error) => setErrorMessageLogin(error.response.data.message));
   };
 
   return (
@@ -73,14 +74,14 @@ export const AuthForm = () => {
             fontSize: "32px",
             fontWeight: 700,
             color: "#232115",
-            marginBottom: "40px"
+            marginBottom: "40px",
           }}
         >
           {location === loginLocation ? "Log in" : "Sign up"}
         </Typography>
         <Formik
           initialValues={{ email: "", password: "" }}
-          onSubmit={values =>
+          onSubmit={(values) =>
             location === loginLocation
               ? handleLoginSubmit(values.email, values.password)
               : handleSignupSubmit(values.email, values.password)
@@ -93,7 +94,7 @@ export const AuthForm = () => {
                 sx={{
                   display: "flex",
                   flexDirection: "column",
-                  width: "100%"
+                  width: "100%",
                 }}
               >
                 <Field
@@ -110,7 +111,7 @@ export const AuthForm = () => {
                       marginTop: "5px",
                       color: "red",
                       position: "absolute",
-                      top: "327px"
+                      top: "327px",
                     }}
                   >
                     {errors.email}
@@ -140,7 +141,7 @@ export const AuthForm = () => {
                       marginTop: "5px",
                       color: "red",
                       position: "absolute",
-                      top: "398px"
+                      top: "398px",
                     }}
                   >
                     {errors.password}
@@ -154,10 +155,24 @@ export const AuthForm = () => {
                       color: "red",
                       position: "absolute",
                       top: "327px",
-                      left: "421px"
+                      left: "290px",
                     }}
                   >
                     {errorMessageSignup}
+                  </Typography>
+                ) : null}
+                {errorMessageLogin ? (
+                  <Typography
+                    sx={{
+                      fontSize: "12px",
+                      marginTop: "5px",
+                      color: "red",
+                      position: "absolute",
+                      top: "400px",
+                      left: "400px",
+                    }}
+                  >
+                    {errorMessageLogin}
                   </Typography>
                 ) : null}
                 <Box sx={{ marginBottom: "40px" }} />
@@ -177,7 +192,7 @@ export const AuthForm = () => {
             fontSize: "13px",
             paddingBottom: "10px",
             lineHeight: "15px",
-            borderBottom: "1px solid lightgrey"
+            borderBottom: "1px solid lightgrey",
           }}
         >
           By continuing with Email, you agree to RMT’s Terms of Service and
@@ -188,7 +203,7 @@ export const AuthForm = () => {
             sx={{
               fontSize: "13px",
               marginTop: "10px",
-              display: "inline-block"
+              display: "inline-block",
             }}
           >
             {location === loginLocation
@@ -206,7 +221,7 @@ export const AuthForm = () => {
               marginTop: "10px",
               textDecorationLine: "underline",
               cursor: "pointer",
-              display: "inline-block"
+              display: "inline-block",
             }}
           >
             {location === loginLocation ? "Sign up" : "Go to login"}

@@ -28,7 +28,10 @@ router.post(
 
       await user.save();
 
-      res.status(201).json({ message: 'User created' });
+      const jwtSecret = 'weiwqeufjdkkwad33948awdkadkawkd9219t23iffkrovk';
+      const token = jwt.sign({ userId: user.id }, jwtSecret, { expiresIn: '1h' });
+
+      res.json({ token, userId: user.id });
     } catch (error) {
       console.log(error);
     }
@@ -52,9 +55,9 @@ router.post(
         return res.status(400).json({ message: 'User not found!' });
       }
 
-      const isMatch = bcrypt.compare(password, user.password);
+      const isMatch = bcrypt.compare(user.password, password);
 
-      if (!isMatch) {
+      if (isMatch) {
         return res.status(400).json({ message: 'Incorrect password!' });
       }
 

@@ -5,14 +5,17 @@ export const useAuth = () => {
   const [userId, setUserId] = useState<String | null>(null);
   const [isReady, setIsReady] = useState(false);
 
-  const login = useCallback((jwtToken: string, id: string) => {
-    setToken(jwtToken);
-    setUserId(id);
-    localStorage.setItem(
-      "userData",
-      JSON.stringify({ token: jwtToken, userId: id })
-    );
-  }, []);
+  const login = useCallback(
+    (jwtToken: string, id: string) => {
+      setToken(jwtToken);
+      setUserId(id);
+      localStorage.setItem(
+        "userData",
+        JSON.stringify({ token: jwtToken, userId: id })
+      );
+    },
+    [token, userId]
+  );
 
   const logout = () => {
     setToken(null);

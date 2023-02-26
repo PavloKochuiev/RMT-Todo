@@ -1,26 +1,21 @@
-import { Button } from "@mui/material";
 import React from "react";
+import { Button } from "@mui/material";
 
-type Props = {
-  text: string;
-};
-
-export const CustomButton: React.FC<Props> = ({ text }) => {
+export const LogoutButton = () => {
   return (
     <Button
-      type="submit"
       sx={{
         fontSize: "18px",
         width: "100%",
         textTransform: "none",
-        color: "#232115",
+        color: "white",
         borderRadius: "10px",
         paddingX: "15px",
         backgroundColor: "#FFD600",
-        ":hover": { backgroundColor: "#EDC700" }
+        height: "35px",
       }}
     >
-      {text}
+      Log out
     </Button>
   );
 };
