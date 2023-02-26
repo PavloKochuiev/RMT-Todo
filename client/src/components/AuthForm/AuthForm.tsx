@@ -1,54 +1,68 @@
-import React, { FC, useState } from "react";
+// @ts-nocheck
+import React from "react";
 import { Formik, Form, Field } from "formik";
 import {
   Box,
   IconButton,
   Input,
   InputAdornment,
-  Typography,
+  Typography
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import CustomButton from "./CustomButton";
+import { CustomButton } from "./CustomButton";
 import signupBackground from "../../assets/signupBackground.png";
 import loginBackground from "../../assets/loginBackground.png";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useValidationAuthSchema } from "./validationAuthSchema";
 import axios from "axios";
+import { AuthContext } from "../../context/AuthContext";
 
-export const AuthForm: FC = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [errorMessageSignup, setErrorMessageSignup] = useState("");
-  const history = useHistory();
+type LoginResponse = {
+  jwtToken: string;
+  userId: string;
+};
+
+export const AuthForm = () => {
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [errorMessageSignup, setErrorMessageSignup] = React.useState("");
+  const { login } = React.useContext(AuthContext);
+  const navigate = useNavigate();
   const location = window.location.pathname;
-  const login = "/auth/login";
+  const loginLocation = "/auth/login";
 
   const handleClickShowPassword = () => {
-    setShowPassword((prev) => !prev);
+    setShowPassword((prev: boolean) => !prev);
   };
 
   const handleNavigateToSignup = () => {
-    history.push("/auth/signup");
+    navigate("/auth/signup");
   };
 
   const handleNavigateToLogin = () => {
-    history.push("/auth/login");
+    navigate("/auth/login");
   };
 
   const handleSignupSubmit = async (email: string, password: string) => {
     await axios
-      .post(
+      .post<LoginResponse>(
         "/api/auth/signup",
-        {
-          email: email,
-          password: password,
-        },
-        {
-          headers: { "Content-Type": "application/json" },
-        }
+        { email: email, password: password },
+        { headers: { "Content-Type": "application/json" } }
       )
-      .then((response) => console.log(response.data))
-      .catch((error) => setErrorMessageSignup(error.response.data.message));
+      .then(response => console.log(response.data))
+      .catch(error => setErrorMessageSignup(error.response.data.message));
+  };
+
+  const handleLoginSubmit = async (email: string, password: string) => {
+    await axios
+      .post<LoginResponse>(
+        "/api/auth/login",
+        { email: email, password: password },
+        { headers: { "Content-Type": "application/json" } }
+      )
+      .then(response => login(response.data.jwtToken, response.data.userId))
+      .catch(error => setErrorMessageSignup(error.response.data.message));
   };
 
   return (
@@ -59,15 +73,17 @@ export const AuthForm: FC = () => {
             fontSize: "32px",
             fontWeight: 700,
             color: "#232115",
-            marginBottom: "40px",
+            marginBottom: "40px"
           }}
         >
-          {location === login ? "Log in" : "Sign up"}
+          {location === loginLocation ? "Log in" : "Sign up"}
         </Typography>
         <Formik
           initialValues={{ email: "", password: "" }}
-          onSubmit={(values) =>
-            handleSignupSubmit(values.email, values.password)
+          onSubmit={values =>
+            location === loginLocation
+              ? handleLoginSubmit(values.email, values.password)
+              : handleSignupSubmit(values.email, values.password)
           }
           validationSchema={useValidationAuthSchema}
         >
@@ -77,7 +93,7 @@ export const AuthForm: FC = () => {
                 sx={{
                   display: "flex",
                   flexDirection: "column",
-                  width: "100%",
+                  width: "100%"
                 }}
               >
                 <Field
@@ -94,7 +110,7 @@ export const AuthForm: FC = () => {
                       marginTop: "5px",
                       color: "red",
                       position: "absolute",
-                      top: "327px",
+                      top: "327px"
                     }}
                   >
                     {errors.email}
@@ -124,7 +140,7 @@ export const AuthForm: FC = () => {
                       marginTop: "5px",
                       color: "red",
                       position: "absolute",
-                      top: "398px",
+                      top: "398px"
                     }}
                   >
                     {errors.password}
@@ -138,7 +154,7 @@ export const AuthForm: FC = () => {
                       color: "red",
                       position: "absolute",
                       top: "327px",
-                      left: "421px",
+                      left: "421px"
                     }}
                   >
                     {errorMessageSignup}
@@ -148,7 +164,9 @@ export const AuthForm: FC = () => {
               </Box>
               <Box sx={{ marginBottom: "20px" }}>
                 <CustomButton
-                  text={location === login ? "Log in" : "Sign up with Email"}
+                  text={
+                    location === loginLocation ? "Log in" : "Sign up with Email"
+                  }
                 />
               </Box>
             </Form>
@@ -159,7 +177,7 @@ export const AuthForm: FC = () => {
             fontSize: "13px",
             paddingBottom: "10px",
             lineHeight: "15px",
-            borderBottom: "1px solid lightgrey",
+            borderBottom: "1px solid lightgrey"
           }}
         >
           By continuing with Email, you agree to RMT’s Terms of Service and
@@ -170,16 +188,16 @@ export const AuthForm: FC = () => {
             sx={{
               fontSize: "13px",
               marginTop: "10px",
-              display: "inline-block",
+              display: "inline-block"
             }}
           >
-            {location === login
+            {location === loginLocation
               ? "Don’t have an account?"
               : "Already signed up?"}
           </Typography>{" "}
           <Typography
             onClick={
-              location === login
+              location === loginLocation
                 ? handleNavigateToSignup
                 : handleNavigateToLogin
             }
@@ -188,10 +206,10 @@ export const AuthForm: FC = () => {
               marginTop: "10px",
               textDecorationLine: "underline",
               cursor: "pointer",
-              display: "inline-block",
+              display: "inline-block"
             }}
           >
-            {location === login ? "Sign up" : "Go to login"}
+            {location === loginLocation ? "Sign up" : "Go to login"}
           </Typography>
         </Box>
       </Box>
@@ -199,7 +217,7 @@ export const AuthForm: FC = () => {
         <img
           height={400}
           width={400}
-          src={location === login ? loginBackground : signupBackground}
+          src={location === loginLocation ? loginBackground : signupBackground}
           alt="background"
         />
       </Box>

@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
-import StartButton from "../StartButton/StartButton";
+import { StartButton } from "../StartButton/StartButton";
 import backgroundWelcomePage from "../../assets/backgroundWelcomePage.png";
 
 export const TitleBlock = () => (
@@ -13,7 +13,7 @@ export const TitleBlock = () => (
         lineHeight: "63px",
         fontWeight: 600,
         marginBottom: "16px",
-        position: "relative",
+        position: "relative"
       }}
     >
       Run! Make! Take! <br /> Organize your shitty life, finally.

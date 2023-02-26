@@ -1,18 +1,18 @@
 import React from "react";
 import { Box, Button } from "@mui/material";
 import listerLogo from "../../assets/listerLogo.png";
-import StartButton from "../StartButton/StartButton";
-import { useHistory } from "react-router-dom";
+import { StartButton } from "../StartButton/StartButton";
+import { useNavigate } from "react-router-dom";
 
 export const Header = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleNavigateToLogin = () => {
-    history.push("/auth/login");
+    navigate("/auth/login");
   };
 
   const handleNavigateToWelcomePage = () => {
-    history.push("/");
+    navigate("/");
   };
 
   return (
@@ -21,7 +21,7 @@ export const Header = () => {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        textAlign: "center",
+        textAlign: "center"
       }}
     >
       <Box
@@ -46,7 +46,7 @@ export const Header = () => {
             borderRadius: "10px",
             paddingX: "15px",
             marginRight: "20px",
-            ":hover": { backgroundColor: "hsla(53,10%,69%,.15)" },
+            ":hover": { backgroundColor: "hsla(53,10%,69%,.15)" }
           }}
         >
           Log in

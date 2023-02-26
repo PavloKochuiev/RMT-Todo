@@ -1,36 +1,39 @@
 import { AuthContext } from "./context/AuthContext";
 import { useAuth } from "./hooks/auth.hook";
-import { Switch, Route } from "react-router";
+import { Route, Routes } from "react-router-dom";
 import { AuthPage } from "./pages/AuthPage";
 import { WelcomePage } from "./pages/WelcomePage";
+import { TodoPage } from "./pages/TodoPage";
 
-const App = () => {
+function App() {
   const { login, logout, token, userId, isReady } = useAuth();
-  const isLogin = Boolean(token);
+  const isLogin = !!token;
+
+  const useRoutes = (isLogin: boolean) => {
+    if (isLogin) {
+      return (
+        <Routes>
+          <Route path="/todo" element={<TodoPage />} />
+        </Routes>
+      );
+    }
+
+    return (
+      <Routes>
+        <Route path="/" element={<WelcomePage />} />
+        <Route path="/auth/login" element={<AuthPage />} />
+        <Route path="/auth/signup" element={<AuthPage />} />
+      </Routes>
+    );
+  };
+
+  const routes = useRoutes(isLogin);
 
   return (
     <AuthContext.Provider value={{ login, logout, token, userId, isReady }}>
-      <Switch>
-        {isLogin ? (
-          <Route exact path="/">
-            <WelcomePage />
-          </Route>
-        ) : (
-          <>
-            <Route exact path="/">
-              <WelcomePage />
-            </Route>
-            <Route path="/auth/login">
-              <AuthPage />
-            </Route>
-            <Route path="/auth/signup">
-              <AuthPage />
-            </Route>
-          </>
-        )}
-      </Switch>
+      {routes}
     </AuthContext.Provider>
   );
-};
+}
 
 export default App;

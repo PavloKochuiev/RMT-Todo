@@ -2,13 +2,13 @@ import React from "react";
 
 import { Box } from "@mui/material";
 import listerLogo from "../assets/listerLogo.png";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 
 export const Logo = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleNavigateToWelcomePage = () => {
-    history.push("/");
+    navigate("/");
   };
 
   return (
